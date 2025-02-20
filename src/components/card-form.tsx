@@ -103,19 +103,22 @@ export function CardForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 sm:space-y-6"
+      >
         <FormField
           control={form.control}
           name="number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-200 h-6 flex items-center">
+              <FormLabel className="text-zinc-200 h-5 sm:h-6 flex items-center text-sm sm:text-base">
                 Card Number
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder="1234 5678 9012 3456"
-                  className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                  className="h-9 sm:h-10 bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm sm:text-base"
                   {...field}
                   onChange={(e) => {
                     const formatted = formatCardNumber(e.target.value);
@@ -126,7 +129,7 @@ export function CardForm({
                   disabled={isSubmitting || isSuccess}
                 />
               </FormControl>
-              <FormMessage className="text-red-400" />
+              <FormMessage className="text-red-400 text-xs sm:text-sm" />
             </FormItem>
           )}
         />
@@ -136,13 +139,13 @@ export function CardForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-200 h-6 flex items-center">
+              <FormLabel className="text-zinc-200 h-5 sm:h-6 flex items-center text-sm sm:text-base">
                 Card Holder Name
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder="John Doe"
-                  className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                  className="h-9 sm:h-10 bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm sm:text-base"
                   {...field}
                   onChange={(e) => {
                     const formatted = formatName(e.target.value);
@@ -153,24 +156,24 @@ export function CardForm({
                   disabled={isSubmitting || isSuccess}
                 />
               </FormControl>
-              <FormMessage className="text-red-400" />
+              <FormMessage className="text-red-400 text-xs sm:text-sm" />
             </FormItem>
           )}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4">
           <FormField
             control={form.control}
             name="expiry"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-zinc-200 h-6 flex items-center">
+                <FormLabel className="text-zinc-200 h-5 sm:h-6 flex items-center text-sm sm:text-base">
                   Expiry Date
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="MM/YY"
-                    className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                    className="h-9 sm:h-10 bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm sm:text-base"
                     {...field}
                     onChange={(e) => {
                       const formatted = formatExpiry(e.target.value);
@@ -182,7 +185,7 @@ export function CardForm({
                     disabled={isSubmitting || isSuccess}
                   />
                 </FormControl>
-                <FormMessage className="text-red-400" />
+                <FormMessage className="text-red-400 text-xs sm:text-sm" />
               </FormItem>
             )}
           />
@@ -192,14 +195,17 @@ export function CardForm({
             name="cvc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-zinc-200 h-6 flex items-center gap-2">
+                <FormLabel className="text-zinc-200 h-5 sm:h-6 flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base">
                   <span>CVC</span>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <HelpCircle className="h-4 w-4 text-zinc-400 hover:text-zinc-300 transition-colors" />
+                        <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-400 hover:text-zinc-300 transition-colors" />
                       </TooltipTrigger>
-                      <TooltipContent className="bg-zinc-900 text-zinc-100 border-zinc-800">
+                      <TooltipContent
+                        className="bg-zinc-900 text-zinc-100 border-zinc-800 text-xs sm:text-sm"
+                        sideOffset={4}
+                      >
                         <p>
                           The 3-digit security code on the back of your card
                         </p>
@@ -210,7 +216,7 @@ export function CardForm({
                 <FormControl>
                   <Input
                     placeholder="123"
-                    className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
+                    className="h-9 sm:h-10 bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm sm:text-base"
                     {...field}
                     onChange={(e) => {
                       const value = e.target.value
@@ -224,7 +230,7 @@ export function CardForm({
                     disabled={isSubmitting || isSuccess}
                   />
                 </FormControl>
-                <FormMessage className="text-red-400" />
+                <FormMessage className="text-red-400 text-xs sm:text-sm" />
               </FormItem>
             )}
           />

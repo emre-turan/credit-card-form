@@ -40,8 +40,8 @@ export function CreditCardForm() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="relative h-56 -mt-20 mb-12">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="relative h-44 sm:h-56 -mt-12 sm:-mt-20 mb-8 sm:mb-12">
         <AnimatePresence initial={false}>
           <Card isFlipped={isFlipped} cardData={cardData} />
         </AnimatePresence>
@@ -50,7 +50,7 @@ export function CreditCardForm() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-zinc-800/50 rounded-xl p-6 backdrop-blur-sm"
+        className="bg-zinc-800/50 rounded-lg sm:rounded-xl p-4 sm:p-6 backdrop-blur-sm"
       >
         <CardForm
           form={form}
