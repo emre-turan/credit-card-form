@@ -13,6 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import type { CardFormValues } from "@/lib/schema";
 import { SubmitButton } from "./submit-button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { HelpCircle } from "lucide-react";
 
 interface CardFormProps {
   form: UseFormReturn<CardFormValues>;
@@ -102,7 +109,9 @@ export function CardForm({
           name="number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-200">Card Number</FormLabel>
+              <FormLabel className="text-zinc-200 h-6 flex items-center">
+                Card Number
+              </FormLabel>
               <FormControl>
                 <Input
                   placeholder="1234 5678 9012 3456"
@@ -127,7 +136,9 @@ export function CardForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-200">Card Holder Name</FormLabel>
+              <FormLabel className="text-zinc-200 h-6 flex items-center">
+                Card Holder Name
+              </FormLabel>
               <FormControl>
                 <Input
                   placeholder="John Doe"
@@ -153,7 +164,9 @@ export function CardForm({
             name="expiry"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-zinc-200">Expiry Date</FormLabel>
+                <FormLabel className="text-zinc-200 h-6 flex items-center">
+                  Expiry Date
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="MM/YY"
@@ -179,7 +192,21 @@ export function CardForm({
             name="cvc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-zinc-200">CVC</FormLabel>
+                <FormLabel className="text-zinc-200 h-6 flex items-center gap-2">
+                  <span>CVC</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-4 w-4 text-zinc-400 hover:text-zinc-300 transition-colors" />
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-zinc-900 text-zinc-100 border-zinc-800">
+                        <p>
+                          The 3-digit security code on the back of your card
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="123"
