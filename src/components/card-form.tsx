@@ -1,4 +1,5 @@
 "use client";
+
 import type { UseFormReturn } from "react-hook-form";
 import {
   Form,
@@ -14,33 +15,35 @@ import type { CardFormValues } from "@/lib/schema";
 
 interface CardFormProps {
   form: UseFormReturn<CardFormValues>;
-  onInputFocus: (field: string) => void;
+  onInputFocusAction: (field: string) => void;
 }
 
-export function CardForm({ form, onInputFocus }: CardFormProps) {
-  const { setValue } = form;
-
+export function CardForm({ form, onInputFocusAction }: CardFormProps) {
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\D/g, "");
     const formatted =
       cleaned
         .match(/.{1,4}/g)
         ?.join(" ")
-        .substr(0, 19) || "";
+        .slice(0, 19) || "";
     return formatted;
   };
 
   const formatExpiry = (value: string) => {
     const cleaned = value.replace(/\D/g, "");
     if (cleaned.length >= 2) {
-      const month = cleaned.substring(0, 2);
-      const year = cleaned.substring(2, 4);
+      const month = cleaned.slice(0, 2);
+      const year = cleaned.slice(2, 4);
       if (Number.parseInt(month) > 12) {
         return "12/" + year;
       }
       return month + (cleaned.length > 2 ? "/" + year : "");
     }
     return cleaned;
+  };
+
+  const formatName = (value: string) => {
+    return value.replace(/[^a-zA-Z\s-]/g, "").slice(0, 24);
   };
 
   const onSubmit = (data: CardFormValues) => {
@@ -50,26 +53,27 @@ export function CardForm({ form, onInputFocus }: CardFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Card Number</FormLabel>
+              <FormLabel className="text-zinc-200">Card Number</FormLabel>
               <FormControl>
                 <Input
                   placeholder="1234 5678 9012 3456"
+                  className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
                   {...field}
                   onChange={(e) => {
                     const formatted = formatCardNumber(e.target.value);
                     field.onChange(formatted);
                   }}
-                  onFocus={() => onInputFocus("number")}
+                  onFocus={() => onInputFocusAction("number")}
                   maxLength={19}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
@@ -79,15 +83,21 @@ export function CardForm({ form, onInputFocus }: CardFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Card Holder Name</FormLabel>
+              <FormLabel className="text-zinc-200">Card Holder Name</FormLabel>
               <FormControl>
                 <Input
                   placeholder="John Doe"
+                  className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
                   {...field}
-                  onFocus={() => onInputFocus("name")}
+                  onChange={(e) => {
+                    const formatted = formatName(e.target.value);
+                    field.onChange(formatted);
+                  }}
+                  onFocus={() => onInputFocusAction("name")}
+                  maxLength={24}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
@@ -98,20 +108,21 @@ export function CardForm({ form, onInputFocus }: CardFormProps) {
             name="expiry"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Expiry Date</FormLabel>
+                <FormLabel className="text-zinc-200">Expiry Date</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="MM/YY"
+                    className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
                     {...field}
                     onChange={(e) => {
                       const formatted = formatExpiry(e.target.value);
                       field.onChange(formatted);
                     }}
-                    onFocus={() => onInputFocus("expiry")}
+                    onFocus={() => onInputFocusAction("expiry")}
                     maxLength={5}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -121,29 +132,33 @@ export function CardForm({ form, onInputFocus }: CardFormProps) {
             name="cvc"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>CVC</FormLabel>
+                <FormLabel className="text-zinc-200">CVC</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="123"
+                    className="bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500"
                     {...field}
                     onChange={(e) => {
                       const value = e.target.value
                         .replace(/\D/g, "")
-                        .substr(0, 3);
+                        .slice(0, 3);
                       field.onChange(value);
                     }}
-                    onFocus={() => onInputFocus("cvc")}
+                    onFocus={() => onInputFocusAction("cvc")}
                     maxLength={3}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
         </div>
 
-        <Button type="submit" className="w-full">
-          Submit
+        <Button
+          type="submit"
+          className="w-full bg-zinc-100 text-zinc-900 hover:bg-zinc-200"
+        >
+          Confirm Payment
         </Button>
       </form>
     </Form>

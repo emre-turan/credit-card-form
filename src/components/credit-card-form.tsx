@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card } from "@/components/card";
-import { CardForm } from "@/components/card-form";
+import { Card } from "./card";
+import { CardForm } from "./card-form";
 import { type CardFormValues, cardSchema } from "@/lib/schema";
 
 export function CreditCardForm() {
@@ -29,13 +29,20 @@ export function CreditCardForm() {
   };
 
   return (
-    <div className="w-full max-w-[500px] space-y-8">
-      <div className="relative h-56">
+    <div className="space-y-8">
+      <div className="relative h-56 -mt-20 mb-12">
         <AnimatePresence initial={false}>
           <Card isFlipped={isFlipped} cardData={cardData} />
         </AnimatePresence>
       </div>
-      <CardForm form={form} onInputFocus={handleInputFocus} />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="bg-zinc-800/50 rounded-xl p-6 backdrop-blur-sm"
+      >
+        <CardForm form={form} onInputFocusAction={handleInputFocus} />
+      </motion.div>
     </div>
   );
 }

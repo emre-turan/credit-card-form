@@ -8,7 +8,11 @@ export const cardSchema = z.object({
   name: z
     .string()
     .min(2, "Name must be at least 2 characters")
-    .max(50, "Name must be less than 50 characters"),
+    .max(24, "Name is too long")
+    .regex(
+      /^[a-zA-Z\s-]+$/,
+      "Name can only contain letters, spaces, and hyphens"
+    ),
   expiry: z
     .string()
     .regex(
