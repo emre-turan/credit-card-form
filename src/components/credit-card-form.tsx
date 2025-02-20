@@ -24,8 +24,19 @@ export function CreditCardForm() {
   const { watch } = form;
   const cardData = watch();
 
+  /**
+   * Handles input focus event by flipping the card to show the back face
+   * @param field - The field that is being focused on
+   */
   const handleInputFocus = (field: string) => {
     setIsFlipped(field === "cvc");
+  };
+
+  /**
+   * Handles input blur event by resetting the card flip state to show the front face
+   */
+  const handleInputBlur = () => {
+    setIsFlipped(false);
   };
 
   return (
@@ -41,7 +52,11 @@ export function CreditCardForm() {
         transition={{ delay: 0.2 }}
         className="bg-zinc-800/50 rounded-xl p-6 backdrop-blur-sm"
       >
-        <CardForm form={form} onInputFocusAction={handleInputFocus} />
+        <CardForm
+          form={form}
+          onInputFocusAction={handleInputFocus}
+          onInputBlurAction={handleInputBlur}
+        />
       </motion.div>
     </div>
   );

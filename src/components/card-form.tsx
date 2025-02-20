@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import {
   Form,
@@ -10,15 +11,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import type { CardFormValues } from "@/lib/schema";
+import { SubmitButton } from "./submit-button";
 
 interface CardFormProps {
   form: UseFormReturn<CardFormValues>;
   onInputFocusAction: (field: string) => void;
+  onInputBlurAction: () => void;
 }
 
-export function CardForm({ form, onInputFocusAction }: CardFormProps) {
+export function CardForm({
+  form,
+  onInputFocusAction,
+  onInputBlurAction,
+}: CardFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  /**
+   * Formats the card number
+   * @param value - The card number
+   * @returns The formatted card number
+   */
   const formatCardNumber = (value: string) => {
     const cleaned = value.replace(/\D/g, "");
     const formatted =
@@ -29,6 +43,11 @@ export function CardForm({ form, onInputFocusAction }: CardFormProps) {
     return formatted;
   };
 
+  /**
+   * Formats the expiry date
+   * @param value - The expiry date
+   * @returns The formatted expiry date
+   */
   const formatExpiry = (value: string) => {
     const cleaned = value.replace(/\D/g, "");
     if (cleaned.length >= 2) {
@@ -42,13 +61,37 @@ export function CardForm({ form, onInputFocusAction }: CardFormProps) {
     return cleaned;
   };
 
+  /**
+   * Formats the card holder name
+   * @param value - The card holder name
+   * @returns The formatted card holder name
+   */
   const formatName = (value: string) => {
     return value.replace(/[^a-zA-Z\s-]/g, "").slice(0, 24);
   };
 
-  const onSubmit = (data: CardFormValues) => {
-    console.log("Form submitted:", data);
-    // Handle form submission
+  /**
+   * Handles form submission
+   * @param data - The form data
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = async (data: CardFormValues) => {
+    if (isSubmitting || isSuccess) return;
+
+    try {
+      setIsSubmitting(true);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setIsSubmitting(false);
+      setIsSuccess(true);
+
+      setTimeout(() => {
+        setIsSuccess(false);
+        form.reset();
+      }, 1500);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -71,6 +114,7 @@ export function CardForm({ form, onInputFocusAction }: CardFormProps) {
                   }}
                   onFocus={() => onInputFocusAction("number")}
                   maxLength={19}
+                  disabled={isSubmitting || isSuccess}
                 />
               </FormControl>
               <FormMessage className="text-red-400" />
@@ -95,6 +139,7 @@ export function CardForm({ form, onInputFocusAction }: CardFormProps) {
                   }}
                   onFocus={() => onInputFocusAction("name")}
                   maxLength={24}
+                  disabled={isSubmitting || isSuccess}
                 />
               </FormControl>
               <FormMessage className="text-red-400" />
@@ -119,7 +164,9 @@ export function CardForm({ form, onInputFocusAction }: CardFormProps) {
                       field.onChange(formatted);
                     }}
                     onFocus={() => onInputFocusAction("expiry")}
+                    onBlur={onInputBlurAction}
                     maxLength={5}
+                    disabled={isSubmitting || isSuccess}
                   />
                 </FormControl>
                 <FormMessage className="text-red-400" />
@@ -145,7 +192,9 @@ export function CardForm({ form, onInputFocusAction }: CardFormProps) {
                       field.onChange(value);
                     }}
                     onFocus={() => onInputFocusAction("cvc")}
+                    onBlur={onInputBlurAction}
                     maxLength={3}
+                    disabled={isSubmitting || isSuccess}
                   />
                 </FormControl>
                 <FormMessage className="text-red-400" />
@@ -154,12 +203,7 @@ export function CardForm({ form, onInputFocusAction }: CardFormProps) {
           />
         </div>
 
-        <Button
-          type="submit"
-          className="w-full bg-zinc-100 text-zinc-900 hover:bg-zinc-200"
-        >
-          Confirm Payment
-        </Button>
+        <SubmitButton isSubmitting={isSubmitting} isSuccess={isSuccess} />
       </form>
     </Form>
   );
